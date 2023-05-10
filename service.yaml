@@ -1,0 +1,157 @@
+openapi: 3.0.2
+info:
+  title: Friends Service API
+  version: 1.0.0
+paths:
+  /users/:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+              required:
+                - username
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+
+  /friend_requests/:
+    post:
+      summary: Send a friend request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sender:
+                  type: integer
+                receiver:
+                  type: integer
+              required:
+                - sender
+                - receiver
+      responses:
+        '201':
+          description: Friend request sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FriendRequest'
+        '400':
+          description: Bad Request
+
+    get:
+      summary: Get list of outgoing and incoming friend requests
+      responses:
+        '200':
+          description: List of friend requests
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FriendRequest'
+        '400':
+          description: Bad Request
+
+  /friend_requests/{id}/:
+    put:
+      summary: Accept or reject a friend request
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: ['accepted', 'rejected']
+              required:
+                - status
+      responses:
+        '200':
+          description: Friend request updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FriendRequest'
+        '400':
+          description: Bad Request
+
+  /friends/:
+    get:
+      summary: Get list of friends
+      responses:
+        '200':
+          description: List of friends
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+
+  /friend_status/{username}/:
+    get:
+      summary: Get friendship status with another user
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Friendship status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+        '400':
+          description: Bad Request
+
+  /friends/{username}/:
+    delete:
+      summary: Remove a friend
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+      responses:
+        '204':
+          description: Friend removed successfully
+        '400':
+          description: Bad Request
+
+components:
+  schemas:
+    User:
+      type:
