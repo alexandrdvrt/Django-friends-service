@@ -6,7 +6,7 @@ $ cd service
 Создание приложения    
 $ python3 manage.py startapp app
 
-Вместо появившиься файлов в папке app вставляем файлы models.py, views.py и добавляем serializers.py и меняем папку urls.py в папке service
+Вместо появившиься файлов в папке app заменяем файлы models.py, views.py и добавляем serializers.py и меняем папку urls.py в папке service
 
 В папке service в файл settings.py в INSTALLED APS добавляем   
 'app.apps.AppConfig',  
